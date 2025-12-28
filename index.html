@@ -34,7 +34,6 @@
             pointer-events: none;
         }
 
-        /* Main Container */
         .container {
             z-index: 3;
             background: rgba(0, 0, 0, 0.8);
@@ -83,20 +82,6 @@
             text-transform: none;
         }
 
-        /* "Domain Not Available" Styling */
-        #off-air {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #fff;
-            color: #000;
-            display: none; 
-            justify-content: center;
-            align-items: center;
-            z-index: 99999;
-            font-family: sans-serif;
-            font-size: 2rem;
-        }
-
         @keyframes flicker {
             0% { opacity: 0.98; }
             50% { opacity: 1; }
@@ -120,9 +105,7 @@
 </head>
 <body>
 
-    <div id="off-air">This domain is not available.</div>
-
-    <div id="main-site">
+    <div id="main-site" style="display:none;">
         <div id="overlay" onclick="startSite()">
             [ CLICK TO AUTHORIZE BROADCAST ]
         </div>
@@ -130,14 +113,11 @@
         <div class="container">
             <h2 class="intro-text">Good evening riverdale</h2>
             <h2 class="intro-text">From Captain Midnight Jr</h2>
-            
             <h1 class="main-line">Getting in the way of law inforcement?</h1>
             <h1 class="huge-text yellow">NO WAY!</h1>
-            
             <div class="warning-box">
                 <p class="warning-title">[PROTESTERS/LIBERALS BEWARE!]</p>
             </div>
-
             <p class="disclaimer">
                 <b>ADVISORY:</b> The term "Beware" is intended solely as a legal precaution and does not constitute a threat of physical harm. Please be advised that the obstruction of law enforcement operations may result in immediate arrest and the filing of felony-level criminal charges.
             </p>
@@ -149,7 +129,7 @@
     </div>
 
     <script>
-        function checkTime() {
+        function checkTimeAndRedirect() {
             const now = new Date();
             const formatter = new Intl.DateTimeFormat('en-US', {
                 timeZone: 'America/New_York',
@@ -158,30 +138,24 @@
             });
             
             const currentHour = parseInt(formatter.format(now));
-
-            const offAirDiv = document.getElementById('off-air');
             const mainSiteDiv = document.getElementById('main-site');
 
-            // --- PRODUCTION MODE ---
-            // 'testing' is set to false. The site only works 12am-5am Eastern.
-            const testing = false; 
-
-            if (testing || (currentHour >= 0 && currentHour < 5)) {
-                offAirDiv.style.display = 'none';
+            // ONLY works if it is exactly 3 AM (hour 3)
+            if (currentHour === 3) {
                 mainSiteDiv.style.display = 'block';
             } else {
-                offAirDiv.style.display = 'flex';
-                mainSiteDiv.style.display = 'none';
+                // Redirect to Netflix
+                window.location.href = "https://www.netflix.com/title/80133311";
             }
         }
 
-        checkTime();
+        // Run the check
+        checkTimeAndRedirect();
 
         function startSite() {
             const audio = document.getElementById('bgAudio');
             const overlay = document.getElementById('overlay');
-            
-            audio.play().catch(e => console.log("Audio link error. Check source.", e));
+            audio.play().catch(e => console.log("Audio play error", e));
             overlay.style.display = 'none';
         }
     </script>
